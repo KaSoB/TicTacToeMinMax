@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static TicTacToeMinMax.TicTacToe.Action;
 using static TicTacToeMinMax.TicTacToe.Board;
 
 namespace TicTacToeMinMax.TicTacToe {
@@ -39,11 +38,11 @@ namespace TicTacToeMinMax.TicTacToe {
 
             // check winner
             if (board.IsWinner(player1.State)) {
-                return new Action() { Result = Score.Max };
+                return new Action() { Score = Score.Max };
             } else if (board.IsWinner(player2.State)) {
-                return new Action() { Result = Score.Min };
+                return new Action() { Score = Score.Min };
             } else if (!blankPositions.Any()) {
-                return new Action() { Result = Score.Zero };
+                return new Action() { Score = Score.Zero };
             }
             // for each posible move, calculate score
             List<Action> moves = new List<Action>();
@@ -56,9 +55,9 @@ namespace TicTacToeMinMax.TicTacToe {
                 board.BoardArray[blankPositions[i]] = player.State;
 
                 if (player == player1) {
-                    move.Result = MinMaxFunction(player2).Result;
+                    move.Score = MinMaxFunction(player2).Score;
                 } else if (player == player2) {
-                    move.Result = MinMaxFunction(player1).Result;
+                    move.Score = MinMaxFunction(player1).Score;
                 }
 
                 // reset
@@ -68,9 +67,9 @@ namespace TicTacToeMinMax.TicTacToe {
             }
 
 
-            var possibleMoves = moves.Where(it => it.Result == ((player == player1) ? Score.Max : Score.Min)).ToList();
+            var possibleMoves = moves.Where(it => it.Score == ((player == player1) ? Score.Max : Score.Min)).ToList();
             if (!possibleMoves.Any()) {
-                possibleMoves = moves.Where(it => it.Result == Score.Zero).ToList();
+                possibleMoves = moves.Where(it => it.Score == Score.Zero).ToList();
             }
             if (!possibleMoves.Any()) {
                 possibleMoves = moves;
